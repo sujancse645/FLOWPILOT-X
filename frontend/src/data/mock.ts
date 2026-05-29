@@ -60,6 +60,7 @@ export const navLinks = [
 
 export const dashboardNav = [
   { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+  { href: "/dashboard/command-center", label: "Command Center", icon: "Brain" },
   { href: "/dashboard/agents", label: "AI Agents", icon: "Bot" },
   { href: "/dashboard/workflows", label: "Workflows", icon: "GitBranch" },
   { href: "/dashboard/automation", label: "Automation", icon: "Zap" },

@@ -3,68 +3,84 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const LINES = [
-  "Initializing neural core...",
-  "Loading AI agent matrix...",
-  "Syncing workflow engines...",
-  "Calibrating holographic UI...",
-  "FlowPilot X online.",
+const STEPS = [
+  "Neural Core Initializing",
+  "AI Agents Online",
+  "Cognition Engine Active",
+  "Memory Synchronization",
+  "Workflow Engine Ready",
+  "Autonomous Intelligence Active",
 ];
 
 export function BootSequence({ onComplete }: { onComplete: () => void }) {
-  const [line, setLine] = useState(0);
+  const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (line >= LINES.length) {
+    if (step >= STEPS.length) {
       const t = setTimeout(() => {
         setDone(true);
-        setTimeout(onComplete, 600);
+        setTimeout(onComplete, 500);
       }, 400);
       return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setLine((l) => l + 1), 450);
+    const t = setTimeout(() => setStep((s) => s + 1), 520);
     return () => clearTimeout(t);
-  }, [line, onComplete]);
+  }, [step, onComplete]);
 
   return (
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#030014]"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#050816]"
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(124,58,237,0.2),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(124,58,237,0.35),transparent_65%)]" />
           <motion.div
-            className="relative h-24 w-24 rounded-full border-2 border-[#7C3AED]/50"
-            animate={{ rotate: 360, boxShadow: ["0 0 40px rgba(124,58,237,0.3)", "0 0 80px rgba(6,182,212,0.4)", "0 0 40px rgba(124,58,237,0.3)"] }}
-            transition={{ rotate: { duration: 3, repeat: Infinity, ease: "linear" }, boxShadow: { duration: 2, repeat: Infinity } }}
+            className="relative h-28 w-28 rounded-full border-2 border-violet-400/60"
+            animate={{
+              rotate: 360,
+              boxShadow: [
+                "0 0 60px rgba(124,58,237,0.5)",
+                "0 0 100px rgba(6,182,212,0.5)",
+                "0 0 60px rgba(124,58,237,0.5)",
+              ],
+            }}
+            transition={{ rotate: { duration: 4, repeat: Infinity, ease: "linear" }, boxShadow: { duration: 2, repeat: Infinity } }}
           >
-            <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] opacity-80 breathe" />
-            <div className="absolute inset-0 flex items-center justify-center font-display text-xs font-bold text-white">
+            <div className="absolute inset-3 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] breathe" />
+            <div className="absolute inset-0 flex items-center justify-center font-display text-sm font-bold text-white">
               FPX
             </div>
           </motion.div>
           <motion.p
-            className="mt-8 font-display text-xl font-bold gradient-text"
+            className="mt-10 font-display text-2xl font-bold gradient-text"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
             FlowPilot X
           </motion.p>
-          <div className="mt-6 h-24 w-80 font-mono text-xs text-[#64748b] space-y-1">
-            {LINES.slice(0, line).map((l, i) => (
-              <motion.div key={l} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
-                <span className="text-emerald-400">▸</span> {l}
+          <p className="mt-2 text-xs text-cyan-300/80 tracking-[0.3em] uppercase">Autonomous AI Operating System</p>
+          <div className="mt-8 w-80 space-y-2 font-mono text-xs">
+            {STEPS.slice(0, step).map((s, i) => (
+              <motion.div
+                key={s}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex items-center gap-2 text-secondary"
+              >
+                <span className="text-emerald-400">▸</span>
+                {s}
+                {i === step - 1 && <span className="ml-auto text-violet-400 animate-pulse">...</span>}
               </motion.div>
             ))}
           </div>
-          <div className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-white/5">
+          <div className="mt-8 h-1 w-64 overflow-hidden rounded-full bg-white/5">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4]"
+              className="h-full bg-gradient-to-r from-[#7C3AED] via-[#06B6D4] to-[#8B5CF6]"
               initial={{ width: "0%" }}
-              animate={{ width: `${(line / LINES.length) * 100}%` }}
+              animate={{ width: `${(step / STEPS.length) * 100}%` }}
             />
           </div>
         </motion.div>

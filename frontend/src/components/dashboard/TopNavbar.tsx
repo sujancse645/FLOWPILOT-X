@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Bell, Activity, User, Sparkles } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
@@ -7,7 +8,9 @@ import { motion } from "framer-motion";
 import { AIPulse } from "@/components/shared/AIPulse";
 import { SidebarToggle } from "./Sidebar";
 import { CommandPalette } from "@/components/fx/CommandPalette";
+import { AutonomousToggle } from "@/components/elite/AutonomousToggle";
 import { isClerkEnabled } from "@/lib/config";
+import { useNotifications } from "@/providers/NotificationProvider";
 
 interface TopNavbarProps {
   onMenuClick: () => void;
@@ -15,6 +18,9 @@ interface TopNavbarProps {
 }
 
 export function TopNavbar({ onMenuClick, connected }: TopNavbarProps) {
+  const { notifications, unread, markRead, markAllRead } = useNotifications();
+  const [notifOpen, setNotifOpen] = useState(false);
+
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -34,6 +40,7 @@ export function TopNavbar({ onMenuClick, connected }: TopNavbarProps) {
       </div>
 
       <div className="flex items-center gap-2 ml-auto">
+        <AutonomousToggle />
         <CommandPalette />
         <div className="hidden md:flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs border border-white/5">
           <AIPulse size="sm" />
@@ -44,14 +51,51 @@ export function TopNavbar({ onMenuClick, connected }: TopNavbarProps) {
         <div className="hidden sm:flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] text-[#64748b]">
           <Activity className="h-3 w-3 text-[#7C3AED]" />
         </div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative p-2.5 rounded-xl hover:bg-white/5 text-[#94a3b8] hover:text-white border border-transparent hover:border-[#7C3AED]/30 transition-all"
-        >
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[#7C3AED] animate-pulse" />
-        </motion.button>
+        <div className="relative">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setNotifOpen(!notifOpen)}
+            className="relative p-2.5 rounded-xl hover:bg-white/5 text-[#94a3b8] hover:text-white border border-transparent hover:border-[#7C3AED]/30 transition-all"
+          >
+            <Bell className="h-4 w-4" />
+            {unread > 0 && (
+              <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] font-bold text-white">
+                {unread > 9 ? "9+" : unread}
+              </span>
+            )}
+          </motion.button>
+          {notifOpen && (
+            <div className="absolute right-0 top-full mt-2 w-80 rounded-2xl holo-panel border border-white/10 shadow-2xl z-50 overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+                <span className="text-sm font-semibold text-white">Notifications</span>
+                {unread > 0 && (
+                  <button onClick={markAllRead} className="text-xs text-violet-300 hover:text-white">
+                    Mark all read
+                  </button>
+                )}
+              </div>
+              <div className="max-h-72 overflow-y-auto">
+                {notifications.length === 0 ? (
+                  <p className="p-4 text-sm text-muted">No notifications yet</p>
+                ) : (
+                  notifications.slice(0, 8).map((n) => (
+                    <button
+                      key={n.id}
+                      onClick={() => markRead(n.id)}
+                      className={`w-full text-left px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors ${
+                        !n.read ? "bg-violet-500/5" : ""
+                      }`}
+                    >
+                      <p className="text-sm font-medium text-white">{n.title}</p>
+                      <p className="text-xs text-muted mt-0.5 line-clamp-2">{n.body}</p>
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
         {isClerkEnabled() ? (
           <UserButton appearance={{ elements: { avatarBox: "h-9 w-9 ring-2 ring-[#7C3AED]/30" } }} />
         ) : (

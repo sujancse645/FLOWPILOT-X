@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { isClerkEnabled } from "@/lib/config";
 import { SocketProvider } from "./SocketProvider";
+import { AutonomousProvider } from "./AutonomousProvider";
 import { BootSequence } from "@/components/fx/BootSequence";
 import { CursorGlow } from "@/components/fx/CursorGlow";
 import { CommandPalette } from "@/components/fx/CommandPalette";
+import { NotificationProvider } from "./NotificationProvider";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const [booted, setBooted] = useState(false);
@@ -28,10 +30,14 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   const inner = (
     <SocketProvider>
-      {showBoot && !booted && <BootSequence onComplete={onBootComplete} />}
-      <CursorGlow />
-      <CommandPalette />
-      {children}
+      <NotificationProvider>
+        <AutonomousProvider>
+          {showBoot && !booted && <BootSequence onComplete={onBootComplete} />}
+          <CursorGlow />
+          <CommandPalette />
+          {children}
+        </AutonomousProvider>
+      </NotificationProvider>
     </SocketProvider>
   );
 

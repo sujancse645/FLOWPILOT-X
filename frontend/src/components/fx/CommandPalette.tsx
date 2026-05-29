@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { Search, Bot, GitBranch, FileText, Zap, BarChart3, Command } from "lucide-react";
 
 const COMMANDS = [
-  { id: "agents", label: "Open AI Agents", icon: Bot, href: "/dashboard/agents" },
+  { id: "command", label: "Neural Command Center", icon: Command, href: "/dashboard/command-center" },
+  { id: "agents", label: "Deploy AI Agents", icon: Bot, href: "/dashboard/agents" },
   { id: "workflows", label: "Create Workflow", icon: GitBranch, href: "/dashboard/workflows" },
-  { id: "documents", label: "Analyze Document", icon: FileText, href: "/dashboard/documents" },
+  { id: "documents", label: "Summarize Documents", icon: FileText, href: "/dashboard/documents" },
   { id: "automation", label: "Activate Automation", icon: Zap, href: "/dashboard/automation" },
   { id: "analytics", label: "Generate Report", icon: BarChart3, href: "/dashboard/analytics" },
+  { id: "support", label: "Analyze Support Tickets", icon: Bot, href: "/dashboard/conversations" },
   { id: "dashboard", label: "Mission Control", icon: Command, href: "/dashboard" },
 ];
 

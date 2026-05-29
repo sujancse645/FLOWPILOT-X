@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { workflowNodeTypes } from "@/data/mock";
 import { api } from "@/lib/api";
+import { saveExecution, logActivity } from "@/lib/data/data-service";
+import type { WorkflowExecutionRecord } from "@/lib/data/types";
+import { WorkflowReplay } from "@/components/workflow/WorkflowReplay";
 
 const initialNodes: Node[] = [
   { id: "1", type: "custom", position: { x: 100, y: 150 }, data: { label: "Trigger", type: "trigger", color: "#06B6D4" } },
@@ -75,6 +78,7 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [executing, setExecuting] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [lastExecution, setLastExecution] = useState<WorkflowExecutionRecord | null>(null);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: "#7C3AED" } }, eds)),
@@ -94,8 +98,20 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
     setProgress(0);
     onExecute?.();
     const nodeIds = ["1", "2", "3", "4"];
+    const labels = ["Trigger", "AI Analysis", "Classification", "Email"];
+    const started = new Date().toISOString();
+    const timeline: WorkflowExecutionRecord["timeline"] = [];
+
     for (let i = 0; i < nodeIds.length; i++) {
+      timeline.push({
+        node_id: nodeIds[i],
+        label: labels[i],
+        status: "running",
+        started_at: new Date().toISOString(),
+        reasoning: i === 1 ? "Analyzing intent with neural classifier" : i === 2 ? "Routing to optimal branch" : undefined,
+      });
       await new Promise((r) => setTimeout(r, 1200));
+      timeline[i] = { ...timeline[i], status: "completed", completed_at: new Date().toISOString() };
       setNodes((nds) =>
         nds.map((n) => ({ ...n, data: { ...n.data, executing: n.id === nodeIds[i] } }))
       );
@@ -104,6 +120,19 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
     await new Promise((r) => setTimeout(r, 500));
     setNodes((nds) => nds.map((n) => ({ ...n, data: { ...n.data, executing: false } })));
     setExecuting(false);
+
+    const exec: WorkflowExecutionRecord = {
+      id: `${Date.now()}`,
+      workflow_id: "demo",
+      status: "completed",
+      timeline,
+      started_at: started,
+      completed_at: new Date().toISOString(),
+    };
+    saveExecution(exec);
+    setLastExecution(exec);
+    await logActivity("Workflow execution completed", "Workflow AI", "workflow");
+
     try {
       await api("/api/workflows/demo/execute", { method: "POST" });
     } catch { /* demo */ }
@@ -142,6 +171,10 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
             <motion.div className="h-full bg-gradient-to-r from-emerald-500 to-[#06B6D4]" animate={{ width: `${progress}%` }} />
           </div>
         </motion.div>
+      )}
+
+      {lastExecution && !executing && (
+        <WorkflowReplay execution={lastExecution} />
       )}
 
       <div className="holo-panel rounded-2xl overflow-hidden glow-border p-[1px]" style={{ height: "calc(100vh - 280px)", minHeight: 400 }}>

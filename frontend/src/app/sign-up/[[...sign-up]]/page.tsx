@@ -2,35 +2,34 @@ import Link from "next/link";
 import { SignUp } from "@clerk/nextjs";
 import { isClerkEnabled } from "@/lib/config";
 import { Button } from "@/components/ui/button";
+import { AuthShell } from "@/components/auth/AuthShell";
 
 export default function SignUpPage() {
   if (!isClerkEnabled()) {
     return (
-      <div className="min-h-screen grid-bg flex flex-col items-center justify-center p-4 gap-6">
-        <div className="glass rounded-2xl p-8 max-w-md text-center">
-          <h1 className="font-display text-2xl font-bold text-white">Dev Mode</h1>
-          <p className="mt-2 text-sm text-[#94a3b8]">
-            Clerk keys are not configured. Start building without sign-up in local dev.
-          </p>
-          <Link href="/dashboard" className="inline-block mt-6">
-            <Button>Go to Dashboard</Button>
+      <AuthShell title="Create your workspace" subtitle="Clerk is not configured — start building in dev mode.">
+        <div className="p-6 text-center">
+          <Link href="/dashboard" className="inline-block mt-2">
+            <Button className="w-full">Enter workspace</Button>
           </Link>
         </div>
-      </div>
+      </AuthShell>
     );
   }
 
   return (
-    <div className="min-h-screen grid-bg flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#7C3AED]/10 to-transparent" />
+    <AuthShell title="Deploy your AI workforce" subtitle="Create an organization and invite your team.">
       <SignUp
         appearance={{
           elements: {
-            rootBox: "mx-auto",
-            card: "glass border border-white/10 shadow-2xl",
+            rootBox: "mx-auto w-full",
+            card: "bg-transparent shadow-none border-0",
+            formButtonPrimary: "bg-gradient-to-r from-violet-600 to-cyan-500",
+            socialButtonsBlockButton: "border border-white/10 bg-white/5 hover:bg-white/10",
           },
         }}
+        signInUrl="/sign-in"
       />
-    </div>
+    </AuthShell>
   );
 }

@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { SceneShell } from "@/components/fx/SceneShell";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { TopNavbar } from "@/components/dashboard/TopNavbar";
 import { ConnectionBanner } from "@/components/dashboard/ConnectionBanner";
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useSocket } from "@/hooks/useSocket";
+import { localStore } from "@/lib/data/data-service";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { connected, error } = useSocket();
+
+  useEffect(() => {
+    const settings = localStore.getSettings();
+    if (!settings.onboarding_complete) setShowOnboarding(true);
+  }, []);
 
   return (
     <SceneShell neural className="min-h-screen">
@@ -19,6 +28,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <ConnectionBanner error={error} connected={connected} />
         <main className="p-3 lg:p-6 pt-2">{children}</main>
       </div>
+      <AnimatePresence>
+        {showOnboarding && <OnboardingWizard onComplete={() => setShowOnboarding(false)} />}
+      </AnimatePresence>
     </SceneShell>
   );
 }

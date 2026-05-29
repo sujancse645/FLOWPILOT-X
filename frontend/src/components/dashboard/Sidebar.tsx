@@ -5,13 +5,13 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Bot, GitBranch, Zap, FileText, BarChart3,
-  MessageSquare, Mic, Store, Plug, Settings, Zap as Logo, X, Menu,
+  MessageSquare, Mic, Store, Plug, Settings, Zap as Logo, X, Menu, Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { dashboardNav } from "@/data/mock";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  LayoutDashboard, Bot, GitBranch, Zap, FileText, BarChart3,
+  LayoutDashboard, Brain, Bot, GitBranch, Zap, FileText, BarChart3,
   MessageSquare, Mic, Store, Plug, Settings,
 };
 
