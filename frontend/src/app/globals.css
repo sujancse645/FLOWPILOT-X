@@ -202,3 +202,47 @@ body {
   stroke-width: 2.5 !important;
   filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.7));
 }
+
+/* Cinematic depth system */
+.depth-layer {
+  transform-style: preserve-3d;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.45),
+    0 0 80px rgba(124, 58, 237, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.float-ui {
+  transform: translateZ(20px);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+}
+.float-ui:hover {
+  transform: translateY(-6px) translateZ(30px) scale(1.01);
+  box-shadow: 0 32px 80px rgba(124, 58, 237, 0.25);
+}
+
+.cinematic-shadow {
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(124, 58, 237, 0.15);
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  opacity: 0.4;
+}
+
+.perspective-scene {
+  perspective: 1400px;
+  perspective-origin: 50% 30%;
+}

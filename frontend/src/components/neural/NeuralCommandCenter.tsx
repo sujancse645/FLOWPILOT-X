@@ -42,6 +42,9 @@ interface NeuralCommandCenterProps {
   showControls?: boolean;
   onAgentSelect?: (id: string) => void;
   activeAgentId?: string;
+  fullscreen?: boolean;
+  activeLink?: [number, number] | null;
+  className?: string;
 }
 
 export function NeuralCommandCenter({
@@ -49,6 +52,9 @@ export function NeuralCommandCenter({
   showControls = true,
   onAgentSelect,
   activeAgentId,
+  fullscreen = false,
+  activeLink = null,
+  className = "",
 }: NeuralCommandCenterProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,13 +86,29 @@ export function NeuralCommandCenter({
     );
   }, [logs, demoRunning]);
 
+  // Burst particles on collaboration link
+  useEffect(() => {
+    if (!activeLink) return;
+    const idx = LINKS.findIndex(([a, b]) => a === activeLink[0] && b === activeLink[1]);
+    if (idx < 0) return;
+    const burst = Array.from({ length: 6 }, () => ({
+      linkIdx: idx,
+      t: Math.random() * 0.3,
+      speed: 0.02 + Math.random() * 0.015,
+    }));
+    setParticles((p) => [...p, ...burst].slice(-24));
+  }, [activeLink]);
+
   // Ambient particle spawn
   useEffect(() => {
     const iv = setInterval(() => {
-      setParticles((p) => [
-        ...p.slice(-12),
-        { linkIdx: Math.floor(Math.random() * LINKS.length), t: 0, speed: 0.008 + Math.random() * 0.012 },
-      ]);
+      const count = fullscreen ? 3 : 1;
+      const batch = Array.from({ length: count }, () => ({
+        linkIdx: Math.floor(Math.random() * LINKS.length),
+        t: 0,
+        speed: 0.008 + Math.random() * 0.012,
+      }));
+      setParticles((p) => [...p.slice(-(fullscreen ? 28 : 12)), ...batch]);
       setCorePulse((c) => c + 1);
       if (autonomous && Math.random() > 0.85) {
         setAgents((prev) =>
@@ -97,9 +119,9 @@ export function NeuralCommandCenter({
           )
         );
       }
-    }, 600);
+    }, fullscreen ? 350 : 600);
     return () => clearInterval(iv);
-  }, [autonomous]);
+  }, [autonomous, fullscreen]);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -109,7 +131,7 @@ export function NeuralCommandCenter({
     if (!ctx) return;
 
     const w = container.clientWidth;
-    const h = height;
+    const h = fullscreen ? container.clientHeight : height;
     canvas.width = w * devicePixelRatio;
     canvas.height = h * devicePixelRatio;
     canvas.style.width = `${w}px`;
@@ -138,16 +160,23 @@ export function NeuralCommandCenter({
     LINKS.forEach(([a, b], i) => {
       const A = getPos(a);
       const B = getPos(b);
+      const isHot =
+        activeLink && activeLink[0] === a && activeLink[1] === b;
       const grad = ctx.createLinearGradient(A.x, A.y, B.x, B.y);
-      grad.addColorStop(0, "rgba(124, 58, 237, 0.4)");
-      grad.addColorStop(0.5, "rgba(6, 182, 212, 0.5)");
-      grad.addColorStop(1, "rgba(139, 92, 246, 0.4)");
+      grad.addColorStop(0, isHot ? "rgba(52, 211, 153, 0.8)" : "rgba(124, 58, 237, 0.4)");
+      grad.addColorStop(0.5, isHot ? "rgba(103, 232, 249, 0.9)" : "rgba(6, 182, 212, 0.5)");
+      grad.addColorStop(1, isHot ? "rgba(52, 211, 153, 0.8)" : "rgba(139, 92, 246, 0.4)");
       ctx.beginPath();
       ctx.moveTo(A.x, A.y);
       ctx.lineTo(B.x, B.y);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = isHot ? 3 : 1.5;
+      if (isHot) {
+        ctx.shadowColor = "#34d399";
+        ctx.shadowBlur = 16;
+      }
       ctx.stroke();
+      ctx.shadowBlur = 0;
     });
 
     // Particles on links
@@ -195,7 +224,7 @@ export function NeuralCommandCenter({
       ctx.fillStyle = stateGlow.replace("0.6", "1").replace("0.3", "0.8");
       ctx.fill();
     });
-  }, [agents, particles, corePulse, height, activeAgentId, hovered]);
+  }, [agents, particles, corePulse, height, fullscreen, activeAgentId, hovered, activeLink]);
 
   useEffect(() => {
     draw();
@@ -213,12 +242,25 @@ export function NeuralCommandCenter({
   useEffect(() => {
     const onResize = () => draw();
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [draw]);
+    const container = containerRef.current;
+    let ro: ResizeObserver | undefined;
+    if (container && fullscreen) {
+      ro = new ResizeObserver(() => draw());
+      ro.observe(container);
+    }
+    return () => {
+      window.removeEventListener("resize", onResize);
+      ro?.disconnect();
+    };
+  }, [draw, fullscreen]);
+
+  const canvasHeight = fullscreen ? "100%" : height;
 
   return (
-    <div className="relative rounded-2xl overflow-hidden glow-border p-[1px]">
-      <div className="holo-panel rounded-2xl overflow-hidden">
+    <div
+      className={`relative overflow-hidden ${fullscreen ? "h-full glow-border p-[1px]" : "rounded-2xl glow-border p-[1px]"} ${className}`}
+    >
+      <div className={`holo-panel overflow-hidden h-full ${fullscreen ? "rounded-none" : "rounded-2xl"}`}>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3 bg-gradient-to-r from-violet-950/50 to-cyan-950/30">
           <div className="flex items-center gap-3">
             <motion.div
@@ -256,7 +298,11 @@ export function NeuralCommandCenter({
           )}
         </div>
 
-        <div ref={containerRef} className="relative" style={{ height }}>
+        <div
+          ref={containerRef}
+          className={`relative ${fullscreen ? "flex-1 min-h-[400px]" : ""}`}
+          style={fullscreen ? { height: canvasHeight, minHeight: 400 } : { height }}
+        >
           <canvas ref={canvasRef} className="absolute inset-0 w-full" />
           {agents.map((agent) => (
             <motion.button

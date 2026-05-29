@@ -9,6 +9,7 @@ import { BootSequence } from "@/components/fx/BootSequence";
 import { CursorGlow } from "@/components/fx/CursorGlow";
 import { CommandPalette } from "@/components/fx/CommandPalette";
 import { NotificationProvider } from "./NotificationProvider";
+import { ScenarioEngineProvider } from "./ScenarioEngineProvider";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const [booted, setBooted] = useState(false);
@@ -31,12 +32,14 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   const inner = (
     <SocketProvider>
       <NotificationProvider>
+        <ScenarioEngineProvider>
         <AutonomousProvider>
           {showBoot && !booted && <BootSequence onComplete={onBootComplete} />}
           <CursorGlow />
           <CommandPalette />
           {children}
         </AutonomousProvider>
+        </ScenarioEngineProvider>
       </NotificationProvider>
     </SocketProvider>
   );

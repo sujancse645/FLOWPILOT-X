@@ -16,7 +16,7 @@ import { LogoStrip } from "@/components/landing/LogoStrip";
 import { ProductShowcase } from "@/components/landing/ProductShowcase";
 import { ROICalculator } from "@/components/landing/ROICalculator";
 import { CaseStudies } from "@/components/landing/CaseStudies";
-import { DemoModeEngine } from "@/components/demo/DemoModeEngine";
+import { ScrollStory } from "@/components/landing/ScrollStory";
 
 export default function HomePage() {
   return (
@@ -25,9 +25,9 @@ export default function HomePage() {
       <Hero />
       <LogoStrip />
       <NeuralShowcase />
+      <ScrollStory />
       <ProductShowcase />
       <FeatureGrid />
-      <DemoModeEngine />
       <ROICalculator />
       <CaseStudies />
       <IntegrationsBar />

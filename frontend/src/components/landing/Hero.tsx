@@ -60,7 +60,7 @@ export function Hero() {
           <MagneticButton href="/sign-up">
             Start Building <ArrowRight className="h-4 w-4" />
           </MagneticButton>
-          <MagneticButton href="/dashboard" variant="ghost">
+          <MagneticButton href="/dashboard/command-center" variant="ghost">
             <Play className="h-4 w-4" /> Enter Command Center
           </MagneticButton>
         </motion.div>

@@ -139,7 +139,7 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 perspective-scene">
       <div className="flex flex-wrap gap-4 items-center justify-between">
         <div className="flex flex-wrap gap-2">
           {workflowNodeTypes.slice(0, 6).map((nt) => (
@@ -177,7 +177,7 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
         <WorkflowReplay execution={lastExecution} />
       )}
 
-      <div className="holo-panel rounded-2xl overflow-hidden glow-border p-[1px]" style={{ height: "calc(100vh - 280px)", minHeight: 400 }}>
+      <div className="holo-panel depth-layer rounded-2xl overflow-hidden glow-border p-[1px] cinematic-shadow" style={{ height: "calc(100vh - 280px)", minHeight: 400 }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}

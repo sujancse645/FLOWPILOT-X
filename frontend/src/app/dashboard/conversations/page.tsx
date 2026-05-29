@@ -66,9 +66,16 @@ export default function ConversationsPage() {
     await sendMessage(conversationId, text, "user");
     setMessages(await fetchMessages(conversationId));
     setTyping(true);
-    setReasoning("Retrieving context from semantic memory...");
-    await new Promise((r) => setTimeout(r, 600));
-    setReasoning("Routing to optimal agent cluster...");
+    const phases = [
+      "Retrieving context from semantic memory...",
+      "Running sentiment analysis...",
+      "Delegating to agent cluster...",
+      "Routing workflow execution...",
+    ];
+    for (const p of phases) {
+      setReasoning(p);
+      await new Promise((r) => setTimeout(r, 450));
+    }
     try {
       const res = await api<{ reply: string; agent: string }>("/api/ai/chat", {
         method: "POST",
