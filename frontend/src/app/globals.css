@@ -246,3 +246,17 @@ body {
   perspective: 1400px;
   perspective-origin: 50% 30%;
 }
+
+.neural-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+.env-blur-far {
+  backdrop-filter: blur(40px) saturate(150%);
+}

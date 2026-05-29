@@ -45,6 +45,7 @@ interface NeuralCommandCenterProps {
   fullscreen?: boolean;
   activeLink?: [number, number] | null;
   className?: string;
+  hideFooterPanels?: boolean;
 }
 
 export function NeuralCommandCenter({
@@ -55,6 +56,7 @@ export function NeuralCommandCenter({
   fullscreen = false,
   activeLink = null,
   className = "",
+  hideFooterPanels = false,
 }: NeuralCommandCenterProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -123,6 +125,21 @@ export function NeuralCommandCenter({
     return () => clearInterval(iv);
   }, [autonomous, fullscreen]);
 
+  // Subtle agent drift in fullscreen — living ecosystem
+  useEffect(() => {
+    if (!fullscreen) return;
+    const iv = setInterval(() => {
+      setAgents((prev) =>
+        prev.map((a) => ({
+          ...a,
+          x: Math.max(0.1, Math.min(0.9, a.x + (Math.random() - 0.5) * 0.006)),
+          y: Math.max(0.1, Math.min(0.9, a.y + (Math.random() - 0.5) * 0.006)),
+        }))
+      );
+    }, 2800);
+    return () => clearInterval(iv);
+  }, [fullscreen]);
+
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -139,6 +156,25 @@ export function NeuralCommandCenter({
     ctx.scale(devicePixelRatio, devicePixelRatio);
 
     ctx.clearRect(0, 0, w, h);
+
+    // Holographic grid
+    if (fullscreen) {
+      ctx.strokeStyle = "rgba(124, 58, 237, 0.06)";
+      ctx.lineWidth = 1;
+      const grid = 48;
+      for (let gx = 0; gx < w; gx += grid) {
+        ctx.beginPath();
+        ctx.moveTo(gx, 0);
+        ctx.lineTo(gx, h);
+        ctx.stroke();
+      }
+      for (let gy = 0; gy < h; gy += grid) {
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(w, gy);
+        ctx.stroke();
+      }
+    }
 
     // Core glow
     const cx = w / 2;
@@ -261,7 +297,11 @@ export function NeuralCommandCenter({
       className={`relative overflow-hidden ${fullscreen ? "h-full glow-border p-[1px]" : "rounded-2xl glow-border p-[1px]"} ${className}`}
     >
       <div className={`holo-panel overflow-hidden h-full ${fullscreen ? "rounded-none" : "rounded-2xl"}`}>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3 bg-gradient-to-r from-violet-950/50 to-cyan-950/30">
+        <div
+          className={`flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3 bg-gradient-to-r from-violet-950/50 to-cyan-950/30 ${
+            hideFooterPanels ? "bg-black/40 backdrop-blur-md" : ""
+          }`}
+        >
           <div className="flex items-center gap-3">
             <motion.div
               animate={{ rotate: 360 }}
@@ -314,9 +354,20 @@ export function NeuralCommandCenter({
               onMouseLeave={() => setHovered(null)}
               onClick={() => onAgentSelect?.(agent.id)}
               animate={{
-                scale: agent.state === "thinking" ? [1, 1.08, 1] : hovered === agent.id ? 1.1 : 1,
+                scale:
+                  agent.state === "thinking"
+                    ? [1, 1.1, 1]
+                    : agent.state === "executing"
+                      ? [1, 1.06, 1]
+                      : hovered === agent.id
+                        ? 1.12
+                        : 1,
+                y: agent.state !== "idle" ? [0, -3, 0] : 0,
               }}
-              transition={{ repeat: agent.state === "thinking" ? Infinity : 0, duration: 1.2 }}
+              transition={{
+                repeat: agent.state !== "idle" ? Infinity : 0,
+                duration: agent.state === "thinking" ? 1 : 1.8,
+              }}
             >
               <span className="text-2xl drop-shadow-[0_0_12px_rgba(124,58,237,0.8)]">{agent.emoji}</span>
               <span className="text-[9px] font-medium text-white/90 whitespace-nowrap glass rounded px-1.5 py-0.5">
@@ -337,6 +388,7 @@ export function NeuralCommandCenter({
           ))}
         </div>
 
+        {!hideFooterPanels && (
         <div className="grid md:grid-cols-2 gap-0 border-t border-white/10 max-h-36 overflow-hidden">
           <div className="p-3 border-r border-white/5 overflow-y-auto max-h-36">
             <p className="text-[9px] uppercase tracking-widest text-violet-300 mb-2">Autonomous reasoning</p>
@@ -370,6 +422,7 @@ export function NeuralCommandCenter({
             ))}
           </div>
         </div>
+        )}
       </div>
     </div>
   );

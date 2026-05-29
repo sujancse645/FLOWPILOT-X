@@ -16,7 +16,7 @@ type ScenarioId = "complaint" | "invoice" | "lead" | "hr" | "escalation";
 type ScenarioMetrics = { timeSaved: number; roi: number };
 
 type ScenarioEngineContextValue = {
-  running: ScenarioId | null;
+  running: ScenarioId | "investor" | null;
   timeline: ReasoningStep[];
   metrics: ScenarioMetrics | null;
   activeLink: [number, number] | null;
@@ -24,6 +24,7 @@ type ScenarioEngineContextValue = {
     id: ScenarioId,
     onStep?: (step: ReasoningStep) => void
   ) => Promise<void>;
+  runInvestorDemo: () => Promise<void>;
 };
 
 const SCRIPTS: Record<
@@ -99,8 +100,19 @@ const COLLAB_LINKS: Record<ScenarioId, [number, number]> = {
 
 const ScenarioEngineContext = createContext<ScenarioEngineContextValue | null>(null);
 
+const INVESTOR_DEMO: Omit<ReasoningStep, "id" | "active" | "done">[] = [
+  { phase: "thinking", message: "Incoming customer complaint #8842 — initiating analysis", agent: "System" },
+  { phase: "sentiment", message: "Analyzing customer sentiment — urgency: high (0.84)", agent: "Support AI" },
+  { phase: "memory", message: "Retrieving previous interaction history & account context", agent: "Support AI" },
+  { phase: "route", message: "Workflow engine activating Support Triage pipeline", agent: "Workflow AI" },
+  { phase: "delegate", message: "Escalating invoice validation to Finance AI", agent: "Support AI" },
+  { phase: "collab", message: "Finance AI validates refund eligibility — approved", agent: "Finance AI" },
+  { phase: "execute", message: "Email AI generating optimized empathetic response", agent: "Email AI" },
+  { phase: "resolve", message: "Ticket resolved — analytics & memory graph updated", agent: "Analytics AI" },
+];
+
 export function ScenarioEngineProvider({ children }: { children: React.ReactNode }) {
-  const [running, setRunning] = useState<ScenarioId | null>(null);
+  const [running, setRunning] = useState<ScenarioId | "investor" | null>(null);
   const [timeline, setTimeline] = useState<ReasoningStep[]>([]);
   const [metrics, setMetrics] = useState<ScenarioMetrics | null>(null);
   const [activeLink, setActiveLink] = useState<[number, number] | null>(null);
@@ -139,9 +151,40 @@ export function ScenarioEngineProvider({ children }: { children: React.ReactNode
     [addNotification]
   );
 
+  const runInvestorDemo = useCallback(async () => {
+    setRunning("investor");
+    setTimeline([]);
+    setMetrics(null);
+    const links: [number, number][] = [
+      [0, 3],
+      [3, 2],
+      [2, 3],
+      [3, 5],
+      [5, 4],
+    ];
+    for (let i = 0; i < INVESTOR_DEMO.length; i++) {
+      setActiveLink(links[Math.min(i, links.length - 1)]);
+      const step: ReasoningStep = {
+        ...INVESTOR_DEMO[i],
+        id: `inv-${i}`,
+        active: true,
+        done: false,
+      };
+      setTimeline((prev) => [...prev.map((s) => ({ ...s, active: false, done: true })), step]);
+      await logActivity(INVESTOR_DEMO[i].message, INVESTOR_DEMO[i].agent, "investor-demo");
+      await new Promise((r) => setTimeout(r, 1500));
+    }
+    const finalMetrics = { timeSaved: 12, roi: 340 };
+    setMetrics(finalMetrics);
+    setActiveLink(null);
+    addNotification("Autonomous resolution complete", `ROI +$${finalMetrics.roi} · ${finalMetrics.timeSaved}min saved`);
+    setRunning(null);
+    setTimeline((prev) => prev.map((s) => ({ ...s, active: false, done: true })));
+  }, [addNotification]);
+
   const value = useMemo(
-    () => ({ running, timeline, metrics, activeLink, runScenario }),
-    [running, timeline, metrics, activeLink, runScenario]
+    () => ({ running, timeline, metrics, activeLink, runScenario, runInvestorDemo }),
+    [running, timeline, metrics, activeLink, runScenario, runInvestorDemo]
   );
 
   return (

@@ -5,7 +5,7 @@ import { reasoningPhases } from "@/lib/motion";
 
 export type ReasoningStep = {
   id: string;
-  phase: (typeof reasoningPhases)[number]["key"];
+  phase: (typeof reasoningPhases)[number]["key"] | string;
   message: string;
   agent?: string;
   active?: boolean;
@@ -28,7 +28,9 @@ export function ReasoningTimeline({
         <div className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-violet-500/60 via-cyan-400/40 to-transparent" />
         <AnimatePresence mode="popLayout">
           {steps.map((step, i) => {
-            const meta = reasoningPhases.find((p) => p.key === step.phase) || reasoningPhases[i % reasoningPhases.length];
+            const meta =
+              reasoningPhases.find((p) => p.key === step.phase) ||
+              reasoningPhases[i % reasoningPhases.length];
             return (
               <motion.div
                 key={step.id}

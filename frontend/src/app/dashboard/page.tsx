@@ -5,7 +5,10 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line,
   BarChart, Bar,
 } from "recharts";
-import { Bot, GitBranch, CheckCircle, Target, Heart, Zap } from "lucide-react";
+import Link from "next/link";
+import { Bot, GitBranch, CheckCircle, Target, Heart, Zap, ArrowRight, Sparkles } from "lucide-react";
+import { SpatialModule } from "@/components/fx/SpatialModule";
+import { LiveIntelligenceFeed } from "@/components/fx/LiveIntelligenceFeed";
 import { PageHeader } from "@/components/elite/PageHeader";
 import { HoloCard } from "@/components/fx/HoloCard";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
@@ -57,23 +60,41 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Mission Control"
-        title="AI Neural Command Center"
-        description="Live autonomous intelligence mesh — your hackathon centerpiece."
-        action={<AutonomousToggle />}
+        title="AI Operating System"
+        description="Your neural workforce is active. Enter fullscreen command center for the demo."
+        action={
+          <div className="flex gap-2 items-center">
+            <AutonomousToggle />
+            <Link
+              href="/dashboard/command-center"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white"
+            >
+              <Sparkles className="h-4 w-4" /> Fullscreen <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        }
       />
 
-      <NeuralCommandCenter height={520} showControls />
+      <NeuralCommandCenter height={480} showControls />
 
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {cards.map((s, i) => (
-          <HoloCard key={s.label} delay={i * 0.03} className="!p-4 hover-lift">
-            <s.icon className="h-4 w-4 mb-2 opacity-60" style={{ color: s.color }} />
-            <p className="text-[9px] uppercase tracking-widest text-muted">{s.label}</p>
-            <p className="text-2xl font-bold mt-1 stat-value" style={{ color: s.color }}>
-              <AnimatedCounter value={s.value} suffix={s.suffix} decimals={s.dec ?? 0} />
-            </p>
-          </HoloCard>
-        ))}
+      <div className="flex flex-wrap gap-6 items-stretch">
+        <SpatialModule className="flex-1 min-w-[200px] p-5" float>
+          <p className="text-[9px] uppercase tracking-widest text-muted mb-3">Live metrics</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {cards.slice(0, 3).map((s) => (
+              <div key={s.label}>
+                <s.icon className="h-4 w-4 mb-1 opacity-50" style={{ color: s.color }} />
+                <p className="text-[9px] text-muted">{s.label}</p>
+                <p className="text-xl font-bold stat-value" style={{ color: s.color }}>
+                  <AnimatedCounter value={s.value} suffix={s.suffix} decimals={s.dec ?? 0} />
+                </p>
+              </div>
+            ))}
+          </div>
+        </SpatialModule>
+        <SpatialModule className="w-full sm:w-72 p-5" delay={0.08}>
+          <LiveIntelligenceFeed max={6} />
+        </SpatialModule>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3">

@@ -16,7 +16,7 @@ const SCENARIOS = [
 ];
 
 export function ScenarioEngine({ variant = "panel", compact = false }: { variant?: "panel" | "hero"; compact?: boolean }) {
-  const { running, runScenario, metrics, timeline } = useScenarioEngine();
+  const { running, runScenario, runInvestorDemo, metrics, timeline } = useScenarioEngine();
   const [localSteps, setLocalSteps] = useState<ReasoningStep[]>([]);
 
   const handleRun = useCallback(
@@ -73,6 +73,18 @@ export function ScenarioEngine({ variant = "panel", compact = false }: { variant
 
       {compact && (
         <p className="text-[10px] uppercase tracking-[0.35em] text-emerald-400 mb-3">Run live scenario</p>
+      )}
+
+      {isHero && (
+        <motion.button
+          onClick={() => runInvestorDemo()}
+          disabled={!!running}
+          whileHover={{ scale: 1.01 }}
+          className="w-full mb-6 flex items-center justify-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 py-5 text-base font-semibold text-white hover:bg-emerald-500/15 disabled:opacity-50"
+        >
+          <Zap className="h-5 w-5 text-emerald-400" />
+          {running === "investor" ? "Autonomous demo in progress..." : "Run Autonomous AI Demo — Investor Showcase"}
+        </motion.button>
       )}
 
       <div className={`grid gap-3 ${isHero ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" : compact ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-3"}`}>

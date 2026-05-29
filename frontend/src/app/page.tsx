@@ -1,38 +1,22 @@
 import { SceneShell } from "@/components/fx/SceneShell";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
-import { NeuralShowcase } from "@/components/landing/NeuralShowcase";
-import {
-  FeatureGrid,
-  MarketplacePreview,
-  Testimonials,
-  PricingPreview,
-  FAQ,
-  IntegrationsBar,
-  CTASection,
-} from "@/components/landing/LandingSections";
-import { Footer } from "@/components/landing/Footer";
+import { ProductStory } from "@/components/landing/ProductStory";
 import { LogoStrip } from "@/components/landing/LogoStrip";
-import { ProductShowcase } from "@/components/landing/ProductShowcase";
 import { ROICalculator } from "@/components/landing/ROICalculator";
 import { CaseStudies } from "@/components/landing/CaseStudies";
-import { ScrollStory } from "@/components/landing/ScrollStory";
+import { CTASection, FAQ, PricingPreview } from "@/components/landing/LandingSections";
+import { Footer } from "@/components/landing/Footer";
 
 export default function HomePage() {
   return (
-    <SceneShell className="grid-bg">
+    <SceneShell className="grid-bg perspective-scene">
       <Navbar />
       <Hero />
       <LogoStrip />
-      <NeuralShowcase />
-      <ScrollStory />
-      <ProductShowcase />
-      <FeatureGrid />
+      <ProductStory />
       <ROICalculator />
       <CaseStudies />
-      <IntegrationsBar />
-      <MarketplacePreview />
-      <Testimonials />
       <PricingPreview />
       <FAQ />
       <CTASection />

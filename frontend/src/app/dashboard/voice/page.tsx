@@ -45,7 +45,7 @@ export default function VoiceAIPage() {
       )}
 
       <GlowPanel glow className="relative overflow-hidden depth-layer">
-        <CinematicVoiceOrb listening={listening} supported={supported} onToggle={toggleMic} />
+        <CinematicVoiceOrb listening={listening} supported={supported} onToggle={toggleMic} interim={interim} />
       </GlowPanel>
 
       {display && (
