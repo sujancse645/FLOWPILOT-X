@@ -1,26 +1,23 @@
-import { SceneShell } from "@/components/fx/SceneShell";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
-import { ProductStory } from "@/components/landing/ProductStory";
-import { LogoStrip } from "@/components/landing/LogoStrip";
-import { ROICalculator } from "@/components/landing/ROICalculator";
-import { CaseStudies } from "@/components/landing/CaseStudies";
-import { CTASection, FAQ, PricingPreview } from "@/components/landing/LandingSections";
+import { 
+  ProblemSection, 
+  SolutionSection, 
+  BenefitsSection, 
+  CTASection 
+} from "@/components/landing/LandingSections";
 import { Footer } from "@/components/landing/Footer";
 
 export default function HomePage() {
   return (
-    <SceneShell className="grid-bg perspective-scene">
+    <main className="bg-background min-h-screen selection:bg-cyan-500/30">
       <Navbar />
       <Hero />
-      <LogoStrip />
-      <ProductStory />
-      <ROICalculator />
-      <CaseStudies />
-      <PricingPreview />
-      <FAQ />
+      <ProblemSection />
+      <SolutionSection />
+      <BenefitsSection />
       <CTASection />
       <Footer />
-    </SceneShell>
+    </main>
   );
 }

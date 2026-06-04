@@ -2,134 +2,102 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
-import { MagneticButton } from "@/components/fx/MagneticButton";
-import { HoloGlobe } from "@/components/fx/HoloGlobe";
-import { FloatingWorkflowPreview } from "@/components/elite/FloatingWorkflowPreview";
-
-const WORDS = ["Autonomous", "AI", "Workforce", "Platform"];
+import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20">
-      <div className="hero-spotlight" aria-hidden />
-      <FloatingWorkflowPreview />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-32 pb-16">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/10 via-background to-background" />
+      
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center text-center">
+        
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-violet-400/50 bg-violet-500/20 px-5 py-2 text-sm backdrop-blur-xl shadow-[0_0_30px_rgba(139,92,246,0.3)]"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm shadow-sm backdrop-blur-md"
         >
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-90" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399]" />
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
           </span>
-          <span className="gradient-text-purple font-semibold">Neural Workforce Online</span>
+          <span className="text-text-primary font-medium tracking-wide">FlowPilot X Enterprise</span>
         </motion.div>
 
-        <h1 className="font-display text-center text-5xl font-bold tracking-tight sm:text-6xl lg:text-8xl leading-[1.05] drop-shadow-[0_4px_40px_rgba(139,92,246,0.25)]">
-          {WORDS.map((word, i) => (
-            <motion.span
-              key={word}
-              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: 0.15 + i * 0.12, type: "spring", stiffness: 100 }}
-              className="inline-block mr-[0.25em] last:mr-0"
-            >
-              <span className={i < 2 ? "gradient-text" : "text-white"}>{word}</span>
-            </motion.span>
-          ))}
-        </h1>
+        <motion.h1 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary max-w-4xl"
+        >
+          Autonomous AI Workforce for <span className="text-cyan-400">Modern Operations</span>
+        </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mx-auto mt-8 max-w-2xl text-center text-lg sm:text-xl leading-relaxed text-secondary font-medium"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8 max-w-2xl text-lg sm:text-xl text-text-secondary font-light leading-relaxed"
         >
-          Deploy a living AI operating system — agents that collaborate, workflows that execute,
-          intelligence that never sleeps.
+          Deploy a living AI operating system. Orchestrate intelligent agents, automate complex workflows, and scale your operations with absolute precision.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
         >
-          <MagneticButton href="/sign-up">
-            Start Building <ArrowRight className="h-4 w-4" />
-          </MagneticButton>
-          <MagneticButton href="/dashboard/command-center" variant="ghost">
-            <Play className="h-4 w-4" /> Enter Command Center
-          </MagneticButton>
+          <Link href="/sign-up" className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-text-primary text-background font-medium hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 shadow-sm">
+            Deploy Workforce <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link href="/dashboard/command-center" className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/5 border border-white/10 text-text-primary font-medium hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
+            <Play className="h-4 w-4" /> View Live Demo
+          </Link>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.9, type: "spring" }}
-          className="mt-20 perspective-[1200px]"
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mt-20 w-full max-w-5xl rounded-2xl border border-white/10 bg-background-secondary/50 backdrop-blur-xl p-2 shadow-2xl"
         >
-          <div className="glow-border rounded-3xl p-[1.5px] mx-auto max-w-5xl shadow-[0_0_80px_rgba(139,92,246,0.35)]">
-            <div className="holo-panel rounded-3xl overflow-hidden">
-              <div className="flex items-center gap-2 border-b border-white/15 px-5 py-3 bg-gradient-to-r from-violet-950/60 to-cyan-950/40">
+          <div className="rounded-xl overflow-hidden bg-background border border-white/5">
+             <div className="h-10 border-b border-white/5 bg-background flex items-center px-4 gap-2">
                 <div className="flex gap-1.5">
-                  {["#f87171", "#facc15", "#4ade80"].map((c) => (
-                    <div key={c} className="h-3 w-3 rounded-full shadow-sm" style={{ backgroundColor: c }} />
-                  ))}
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                 </div>
-                <span className="text-[11px] text-violet-200 tracking-widest uppercase ml-2 font-medium">
-                  FlowPilot X — Holographic Command
-                </span>
-              </div>
-              <div className="grid lg:grid-cols-2 gap-0 min-h-[340px] bg-gradient-to-br from-violet-950/30 via-[#0f0a2e] to-cyan-950/20">
-                <div className="p-6 border-b lg:border-b-0 lg:border-r border-white/10">
-                  <HoloGlobe />
+                <div className="mx-auto flex-1 text-center">
+                  <span className="text-xs text-text-muted font-medium tracking-widest uppercase">System Execution Log</span>
                 </div>
-                <div className="p-6 grid grid-cols-2 gap-3 content-center">
-                  {[
-                    { label: "Agents", value: "8", color: "#c4b5fd", glow: "#8b5cf6" },
-                    { label: "Workflows", value: "24", color: "#67e8f9", glow: "#22d3ee" },
-                    { label: "Tasks", value: "1.8K", color: "#e9d5ff", glow: "#a78bfa" },
-                    { label: "Accuracy", value: "97%", color: "#6ee7b7", glow: "#34d399" },
-                  ].map((s, i) => (
-                    <motion.div
-                      key={s.label}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 1.4 + i * 0.1 }}
-                      className="glass rounded-xl p-4 hover-lift border border-white/10"
-                    >
-                      <p className="text-[10px] uppercase tracking-wider text-violet-200/90 font-semibold">{s.label}</p>
-                      <p
-                        className="text-3xl font-bold mt-1 stat-value"
-                        style={{ color: s.color, textShadow: `0 0 40px ${s.glow}` }}
-                      >
-                        {s.value}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
+             </div>
+             
+             <div className="p-8 grid md:grid-cols-3 gap-8">
+               <div className="space-y-2">
+                  <div className="text-sm text-text-muted uppercase tracking-wider">Active Agents</div>
+                  <div className="text-4xl font-semibold text-text-primary">12<span className="text-cyan-400 text-lg ml-1">Nodes</span></div>
+               </div>
+               <div className="space-y-2 border-t md:border-t-0 md:border-l border-white/5 md:pl-8 pt-6 md:pt-0">
+                  <div className="text-sm text-text-muted uppercase tracking-wider">Automation Rate</div>
+                  <div className="text-4xl font-semibold text-text-primary">94<span className="text-cyan-400 text-lg ml-1">%</span></div>
+               </div>
+               <div className="space-y-2 border-t md:border-t-0 md:border-l border-white/5 md:pl-8 pt-6 md:pt-0">
+                  <div className="text-sm text-text-muted uppercase tracking-wider">System Status</div>
+                  <div className="flex items-center gap-2 h-10 mt-1">
+                     <span className="relative flex h-3 w-3">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+                     </span>
+                     <span className="text-xl font-medium text-text-primary">Operational</span>
+                  </div>
+               </div>
+             </div>
           </div>
         </motion.div>
-      </div>
 
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <div className="h-10 w-6 rounded-full border-2 border-violet-400/50 flex justify-center pt-2 shadow-[0_0_20px_rgba(139,92,246,0.4)]">
-          <motion.div
-            className="h-2 w-1.5 rounded-full bg-gradient-to-b from-violet-400 to-cyan-400"
-            animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          />
-        </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

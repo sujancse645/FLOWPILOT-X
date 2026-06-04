@@ -17,51 +17,38 @@ import type { WorkflowExecutionRecord } from "@/lib/data/types";
 import { WorkflowReplay } from "@/components/workflow/WorkflowReplay";
 
 const initialNodes: Node[] = [
-  { id: "1", type: "custom", position: { x: 250, y: 150 }, data: { label: "Incoming Support Ticket", type: "trigger", color: "#06b6d4" } },
-  { id: "2", type: "custom", position: { x: 600, y: 100 }, data: { label: "Analyze Sentiment", type: "ai-analysis", color: "#7C3AED", executing: true } },
-  { id: "3", type: "custom", position: { x: 600, y: 250 }, data: { label: "Check Knowledge Base", type: "agent-task", color: "#8B5CF6" } },
-  { id: "4", type: "custom", position: { x: 950, y: 150 }, data: { label: "Draft Resolution", type: "email", color: "#10B981" } },
+  { id: "1", type: "custom", position: { x: 250, y: 150 }, data: { label: "Incoming Support Ticket", type: "trigger", color: "#22D3EE" } },
+  { id: "2", type: "custom", position: { x: 600, y: 100 }, data: { label: "Analyze Sentiment", type: "ai-analysis", color: "#64748B", executing: true } },
+  { id: "3", type: "custom", position: { x: 600, y: 250 }, data: { label: "Check Knowledge Base", type: "agent-task", color: "#64748B" } },
+  { id: "4", type: "custom", position: { x: 950, y: 150 }, data: { label: "Draft Resolution", type: "email", color: "#34D399" } },
 ];
 
 const initialEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2", animated: true, style: { stroke: "#7C3AED" } },
-  { id: "e1-3", source: "1", target: "3", animated: true, style: { stroke: "#7C3AED" } },
-  { id: "e2-4", source: "2", target: "4", animated: true, style: { stroke: "#06B6D4" } },
-  { id: "e3-4", source: "3", target: "4", animated: true, style: { stroke: "#06B6D4" } },
+  { id: "e1-2", source: "1", target: "2", animated: true, style: { stroke: "#22D3EE" } },
+  { id: "e1-3", source: "1", target: "3", animated: true, style: { stroke: "#22D3EE" } },
+  { id: "e2-4", source: "2", target: "4", animated: true, style: { stroke: "#64748B" } },
+  { id: "e3-4", source: "3", target: "4", animated: true, style: { stroke: "#64748B" } },
 ];
 
 function CustomNode({ data }: { data: { label: string; color: string; executing?: boolean } }) {
   return (
     <motion.div
-      animate={
-        data.executing
-          ? {
-              boxShadow: [
-                `0 0 30px ${data.color}88`,
-                `0 0 50px ${data.color}cc`,
-                `0 0 30px ${data.color}88`,
-              ],
-            }
-          : {}
-      }
-      transition={{ duration: 1, repeat: data.executing ? Infinity : 0 }}
-      className={`relative holo-panel rounded-xl px-4 py-3 min-w-[150px] border transition-all ${
-        data.executing ? "ring-2 ring-emerald-400" : ""
+      className={`relative bg-background-secondary rounded-xl px-4 py-3 min-w-[150px] border transition-all shadow-md ${
+        data.executing ? "border-cyan-400/50" : "border-white/10"
       }`}
-      style={{ borderColor: `${data.color}50` }}
     >
-      <Handle type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#7C3AED] !border-0 !shadow-[0_0_8px_#7C3AED]" />
+      <Handle type="target" position={Position.Left} className="!w-2 !h-2 !bg-white/20 !border-0" />
       <div className="flex items-center gap-2">
         <motion.div
           className="h-2.5 w-2.5 rounded-full"
-          style={{ backgroundColor: data.color, boxShadow: `0 0 10px ${data.color}` }}
-          animate={data.executing ? { scale: [1, 1.4, 1] } : {}}
-          transition={{ repeat: Infinity, duration: 0.8 }}
+          style={{ backgroundColor: data.color }}
+          animate={data.executing ? { scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] } : {}}
+          transition={{ repeat: Infinity, duration: 1.5 }}
         />
-        <span className="text-sm font-medium text-white">{data.label}</span>
+        <span className="text-sm font-medium text-text-primary">{data.label}</span>
       </div>
-      {data.executing && <div className="absolute inset-0 rounded-xl shimmer opacity-20 pointer-events-none" />}
-      <Handle type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#06B6D4] !border-0 !shadow-[0_0_8px_#06B6D4]" />
+      {data.executing && <div className="absolute inset-0 rounded-xl bg-cyan-400/5 pointer-events-none" />}
+      <Handle type="source" position={Position.Right} className="!w-2 !h-2 !bg-white/20 !border-0" />
     </motion.div>
   );
 }
@@ -80,7 +67,7 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
   const [lastExecution, setLastExecution] = useState<WorkflowExecutionRecord | null>(null);
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: "#7C3AED" } }, eds)),
+    (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: "#22D3EE" } }, eds)),
     [setEdges]
   );
 
@@ -140,14 +127,14 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
   };
 
   return (
-    <div className="space-y-4 perspective-scene">
+    <div className="space-y-4">
       <div className="flex flex-wrap gap-4 items-center justify-between">
         <div className="flex flex-wrap gap-2">
           {workflowNodeTypes.slice(0, 6).map((nt) => (
             <button
               key={nt.type}
               onClick={() => addNode(nt.type, nt.label, nt.color)}
-              className="glass rounded-lg px-3 py-1.5 text-xs text-[#94a3b8] hover:text-white hover:border-[#7C3AED]/50 border border-transparent transition-all"
+              className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text-secondary hover:text-white hover:bg-white/10 transition-all"
             >
               <Plus className="h-3 w-3 inline mr-1" />
               {nt.label}
@@ -155,9 +142,9 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
           ))}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm"><Save className="h-4 w-4" /> Save</Button>
-          <Button size="sm" onClick={execute} disabled={executing}>
-            <Play className="h-4 w-4" /> {executing ? "Executing..." : "Execute"}
+          <Button variant="outline" size="sm" className="bg-background-secondary border-white/10"><Save className="h-4 w-4 mr-1.5" /> Save</Button>
+          <Button size="sm" onClick={execute} disabled={executing} className="bg-cyan-500 text-black hover:bg-cyan-400">
+            <Play className="h-4 w-4 mr-1.5" /> {executing ? "Executing..." : "Execute"}
           </Button>
         </div>
       </div>
@@ -165,11 +152,11 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
       {executing && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-emerald-400">Workflow executing...</span>
-            <span className="text-[#94a3b8]">{Math.round(progress)}%</span>
+            <span className="text-cyan-400 font-medium">Workflow executing...</span>
+            <span className="text-text-muted">{Math.round(progress)}%</span>
           </div>
           <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
-            <motion.div className="h-full bg-gradient-to-r from-emerald-500 to-[#06B6D4]" animate={{ width: `${progress}%` }} />
+            <motion.div className="h-full bg-cyan-400" animate={{ width: `${progress}%` }} />
           </div>
         </motion.div>
       )}
@@ -178,7 +165,7 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
         <WorkflowReplay execution={lastExecution} />
       )}
 
-      <div className="holo-panel depth-layer rounded-2xl overflow-hidden glow-border p-[1px] cinematic-shadow" style={{ height: "calc(100vh - 280px)", minHeight: 400 }}>
+      <div className="rounded-2xl overflow-hidden border border-white/10 bg-background" style={{ height: "calc(100vh - 280px)", minHeight: 400 }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -187,20 +174,11 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-[#050816]"
+          className="bg-[#0B0F17]"
         >
-          <Background color="#7C3AED" gap={24} size={1} style={{ opacity: 0.15 }} />
-          <svg style={{ position: "absolute", width: 0, height: 0 }}>
-            <defs>
-              <linearGradient id="edge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#7C3AED" />
-                <stop offset="50%" stopColor="#06B6D4" />
-                <stop offset="100%" stopColor="#8B5CF6" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <Controls className="!glass !border-white/10 !rounded-xl" />
-          <MiniMap nodeColor={() => "#7C3AED"} maskColor="rgba(5,8,22,0.8)" className="!glass !border-white/10 !rounded-xl" />
+          <Background color="#22D3EE" gap={24} size={1} style={{ opacity: 0.1 }} />
+          <Controls className="!bg-background-secondary !border-white/10 !rounded-xl !shadow-sm" />
+          <MiniMap nodeColor={(n) => n.data.color || "#64748B"} maskColor="rgba(11, 15, 23, 0.8)" className="!bg-background-secondary !border-white/10 !rounded-xl" />
         </ReactFlow>
       </div>
     </div>
