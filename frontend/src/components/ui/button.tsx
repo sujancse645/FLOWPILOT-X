@@ -3,18 +3,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6] text-white hover:shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:scale-[1.02]",
+          "bg-text-primary text-background hover:scale-[1.02]",
         secondary:
-          "glass text-white hover:bg-white/10 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]",
+          "bg-background-secondary border border-white/10 text-text-primary hover:bg-white/5",
         outline:
-          "border border-white/20 bg-transparent text-white hover:bg-white/5 hover:border-primary/50",
-        ghost: "text-white hover:bg-white/5",
-        cyan: "bg-gradient-to-r from-[#06B6D4] to-[#0891B2] text-white hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]",
+          "border border-white/20 bg-transparent text-text-primary hover:bg-white/5 hover:border-cyan-500/50",
+        ghost: "text-text-primary hover:bg-white/5",
+        cyan: "bg-cyan-500 text-black hover:bg-cyan-400",
       },
       size: {
         default: "h-11 px-6 py-2",

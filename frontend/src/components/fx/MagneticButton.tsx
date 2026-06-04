@@ -30,10 +30,10 @@ export function MagneticButton({ children, href, onClick, variant = "primary", c
   const reset = () => setPos({ x: 0, y: 0 });
 
   const base = cn(
-    "relative inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-semibold text-sm overflow-hidden transition-shadow duration-300",
+    "relative inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-medium text-sm overflow-hidden transition-all duration-300",
     variant === "primary"
-      ? "bg-gradient-to-r from-violet-500 via-purple-500 to-cyan-400 text-white shadow-[0_0_50px_rgba(139,92,246,0.55)] hover:shadow-[0_0_70px_rgba(34,211,238,0.5)] border border-white/20"
-      : "glass text-white border-2 border-violet-400/40 hover:border-cyan-400/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.35)]",
+      ? "bg-text-primary text-background hover:scale-[1.02]"
+      : "bg-background-secondary border border-white/10 text-text-primary hover:bg-white/5",
     className
   );
 
@@ -47,7 +47,6 @@ export function MagneticButton({ children, href, onClick, variant = "primary", c
       className={base}
       whileTap={{ scale: 0.97 }}
     >
-      <span className="absolute inset-0 shimmer opacity-40" />
       <span className="relative z-10 flex items-center gap-2">{children}</span>
     </motion.div>
   );

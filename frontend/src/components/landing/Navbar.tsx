@@ -32,13 +32,13 @@ export function Navbar() {
         <div className="flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <motion.div
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#06B6D4]"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500 text-black"
               whileHover={{ rotate: 180, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200 }}
             >
-              <Zap className="h-5 w-5 text-white" />
+              <Zap className="h-5 w-5" />
             </motion.div>
-            <span className="font-display text-xl font-bold gradient-text-purple">FlowPilot X</span>
+            <span className="font-display text-xl font-bold text-text-primary">FlowPilot X</span>
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
@@ -46,19 +46,19 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative text-sm text-secondary transition-colors hover:text-white group"
+                className="relative text-sm text-text-secondary transition-colors hover:text-text-primary group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] transition-all group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-cyan-400 transition-all group-hover:w-full" />
               </Link>
             ))}
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link href="/sign-in" className="text-sm text-secondary hover:text-white px-3 py-2">
+            <Link href="/sign-in" className="text-sm text-text-secondary hover:text-text-primary px-3 py-2">
               Sign In
             </Link>
-            <MagneticButton href="/sign-up" className="!px-5 !py-2.5 !text-sm">
+            <MagneticButton href="/sign-up" className="!px-5 !py-2.5 !text-sm bg-text-primary text-background">
               Start Building
             </MagneticButton>
           </div>
@@ -79,11 +79,11 @@ export function Navbar() {
           >
             <div className="flex flex-col gap-3 p-4">
               {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="text-[#94a3b8] hover:text-white py-2">
+                <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="text-text-secondary hover:text-text-primary py-2">
                   {link.label}
                 </Link>
               ))}
-              <MagneticButton href="/sign-up" className="w-full justify-center">Start Building</MagneticButton>
+              <MagneticButton href="/sign-up" className="w-full justify-center bg-text-primary text-background">Start Building</MagneticButton>
             </div>
           </motion.div>
         )}
