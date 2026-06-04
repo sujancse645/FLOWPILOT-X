@@ -36,22 +36,18 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       )}
       <aside
         className={cn(
-          "fixed left-3 top-3 bottom-3 z-50 flex w-[248px] flex-col rounded-2xl holo-panel transition-transform duration-300 ease-out",
+          "fixed left-3 top-3 bottom-3 z-50 flex w-[248px] flex-col rounded-2xl bg-background-secondary border border-white/10 transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "-translate-x-[calc(100%+1rem)] lg:translate-x-0"
         )}
       >
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <motion.div
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#06B6D4]"
-              animate={{ boxShadow: ["0 0 20px rgba(124,58,237,0.4)", "0 0 35px rgba(6,182,212,0.4)", "0 0 20px rgba(124,58,237,0.4)"] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <Logo className="h-4 w-4 text-white" />
-            </motion.div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500 text-black">
+              <Logo className="h-4 w-4" />
+            </div>
             <div>
-              <span className="font-display text-sm font-bold text-white block">FlowPilot X</span>
-              <span className="text-[9px] uppercase tracking-widest text-[#64748b]">Mission Control</span>
+              <span className="font-display text-sm font-bold text-text-primary block">FlowPilot X</span>
+              <span className="text-[9px] uppercase tracking-widest text-text-muted">Mission Control</span>
             </div>
           </Link>
           <button onClick={onClose} className="lg:hidden text-white"><X className="h-5 w-5" /></button>
@@ -66,7 +62,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 <motion.div
                   className={cn(
                     "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm overflow-hidden",
-                    active ? "text-white" : "text-[#94a3b8] hover:text-white"
+                    active ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
                   )}
                   whileHover={{ x: 4 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -74,14 +70,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                   {active && (
                     <motion.div
                       layoutId="sidebar-active"
-                      className="absolute inset-0 bg-gradient-to-r from-[#7C3AED]/25 to-[#06B6D4]/10 border border-[#7C3AED]/40 rounded-xl"
+                      className="absolute inset-0 bg-white/5 border border-white/10 rounded-xl"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                  <Icon className={cn("h-4 w-4 shrink-0 relative z-10", active && "text-[#a78bfa]")} />
+                  <Icon className={cn("h-4 w-4 shrink-0 relative z-10", active && "text-cyan-400")} />
                   <span className="relative z-10">{item.label}</span>
                   {active && (
-                    <span className="relative z-10 ml-auto h-1.5 w-1.5 rounded-full bg-[#06B6D4] shadow-[0_0_8px_#06B6D4]" />
+                    <span className="relative z-10 ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />
                   )}
                 </motion.div>
               </Link>
@@ -90,17 +86,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-white/10">
-          <div className="glass rounded-xl p-3 flex items-center gap-3">
-            <motion.div
-              className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#7C3AED]/30 flex items-center justify-center shrink-0"
-              animate={{ scale: [1, 1.08, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <span className="h-3 w-3 rounded-full bg-emerald-400 ai-pulse" />
-            </motion.div>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            </div>
             <div>
-              <p className="text-xs font-medium text-white">AI Core</p>
-              <p className="text-[10px] text-emerald-400">24 workflows active</p>
+              <p className="text-xs font-medium text-text-primary">AI Core</p>
+              <p className="text-[10px] text-cyan-400">24 workflows active</p>
             </div>
           </div>
         </div>
@@ -111,7 +103,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
 export function SidebarToggle({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/5">
+    <button onClick={onClick} className="lg:hidden text-text-primary p-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10">
       <Menu className="h-5 w-5" />
     </button>
   );

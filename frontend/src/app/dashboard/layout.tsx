@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { SceneShell } from "@/components/fx/SceneShell";
+
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { TopNavbar } from "@/components/dashboard/TopNavbar";
 import { ConnectionBanner } from "@/components/dashboard/ConnectionBanner";
@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   return (
-    <SceneShell neural className="min-h-screen">
+    <div className="min-h-screen bg-background text-text-primary">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="lg:pl-[272px] min-h-screen">
         <TopNavbar onMenuClick={() => setSidebarOpen(true)} connected={connected} />
@@ -33,6 +33,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <AnimatePresence>
         {showOnboarding && <OnboardingWizard onComplete={() => setShowOnboarding(false)} />}
       </AnimatePresence>
-    </SceneShell>
+    </div>
   );
 }

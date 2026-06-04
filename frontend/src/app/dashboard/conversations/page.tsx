@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mic, Bot, Brain, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/elite/PageHeader";
 import { GlowPanel } from "@/components/elite/GlowPanel";
-import { NeuralBackground } from "@/components/fx/NeuralBackground";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
@@ -102,7 +102,7 @@ export default function ConversationsPage() {
 
   return (
     <div className="relative space-y-6 h-[calc(100vh-8rem)] flex flex-col">
-      <NeuralBackground intensity={0.5} />
+
       <PageHeader
         eyebrow="Neural Dialogue"
         title="Conversations"
