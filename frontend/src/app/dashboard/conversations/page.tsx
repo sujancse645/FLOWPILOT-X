@@ -45,7 +45,9 @@ export default function ConversationsPage() {
   }, []);
 
   useEffect(() => {
-    load();
+    setTimeout(() => {
+      load();
+    }, 0);
   }, [load]);
 
   useEffect(() => {

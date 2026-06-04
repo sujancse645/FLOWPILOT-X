@@ -40,7 +40,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
       withCredentials: true,
     });
 
-    setSocket(s);
+    setTimeout(() => setSocket(s), 0);
 
     s.on("connect", () => {
       setConnected(true);

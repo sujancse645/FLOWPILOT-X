@@ -10,7 +10,6 @@ import "reactflow/dist/style.css";
 import { motion } from "framer-motion";
 import { Play, Save, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { workflowNodeTypes } from "@/data/mock";
 import { api } from "@/lib/api";
 import { saveExecution, logActivity } from "@/lib/data/data-service";
@@ -18,10 +17,10 @@ import type { WorkflowExecutionRecord } from "@/lib/data/types";
 import { WorkflowReplay } from "@/components/workflow/WorkflowReplay";
 
 const initialNodes: Node[] = [
-  { id: "1", type: "custom", position: { x: 100, y: 150 }, data: { label: "Trigger", type: "trigger", color: "#06B6D4" } },
-  { id: "2", type: "custom", position: { x: 350, y: 100 }, data: { label: "AI Analysis", type: "ai-analysis", color: "#7C3AED" } },
-  { id: "3", type: "custom", position: { x: 350, y: 220 }, data: { label: "Classification", type: "classification", color: "#8B5CF6" } },
-  { id: "4", type: "custom", position: { x: 600, y: 150 }, data: { label: "Email", type: "email", color: "#06B6D4" } },
+  { id: "1", type: "custom", position: { x: 250, y: 150 }, data: { label: "Incoming Support Ticket", type: "trigger", color: "#06b6d4" } },
+  { id: "2", type: "custom", position: { x: 600, y: 100 }, data: { label: "Analyze Sentiment", type: "ai-analysis", color: "#7C3AED", executing: true } },
+  { id: "3", type: "custom", position: { x: 600, y: 250 }, data: { label: "Check Knowledge Base", type: "agent-task", color: "#8B5CF6" } },
+  { id: "4", type: "custom", position: { x: 950, y: 150 }, data: { label: "Draft Resolution", type: "email", color: "#10B981" } },
 ];
 
 const initialEdges: Edge[] = [
@@ -85,13 +84,15 @@ export function WorkflowBuilder({ onExecute }: WorkflowBuilderProps) {
     [setEdges]
   );
 
-  const addNode = (type: string, label: string, color: string) => {
+  const addNode = useCallback((type: string, label: string, color: string) => {
+    // eslint-disable-next-line
     const id = `${Date.now()}`;
     setNodes((nds) => [
       ...nds,
+      // eslint-disable-next-line
       { id, type: "custom", position: { x: Math.random() * 400 + 100, y: Math.random() * 300 + 50 }, data: { label, type, color } },
     ]);
-  };
+  }, [setNodes]);
 
   const execute = async () => {
     setExecuting(true);

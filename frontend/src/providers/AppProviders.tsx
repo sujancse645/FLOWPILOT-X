@@ -18,8 +18,10 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const seen = sessionStorage.getItem("fpx-booted");
     if (seen) {
-      setShowBoot(false);
-      setBooted(true);
+      setTimeout(() => {
+        setShowBoot(false);
+        setBooted(true);
+      }, 0);
     }
   }, []);
 

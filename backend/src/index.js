@@ -146,17 +146,60 @@ app.post("/api/documents", (req, res) => {
   res.json(doc);
 });
 
-// AI Chat
+// AI Chat & Dynamic Agent Builder
 app.post("/api/ai/chat", async (req, res) => {
-  const { message, agentType = "support" } = req.body;
-  const responses = {
-    support: `I've analyzed your request: "${message?.slice(0, 50)}...". Based on our knowledge base, I recommend escalating to tier-2 with automated follow-up in 2 hours.`,
-    sales: `Great opportunity detected! Lead score: 87/100. Suggested next action: personalized demo email with ROI calculator.`,
-    default: `FlowPilot AI processed your query. Task delegated to ${agentType} agent. Estimated completion: 45 seconds.`,
-  };
-  const reply = responses[agentType] || responses.default;
-  io.emit("ai:activity", { agent: agentType, action: "responded", message: reply.slice(0, 80) });
-  res.json({ reply, agent: agentType, timestamp: new Date().toISOString() });
+  const { message } = req.body;
+  const lowerMsg = message.toLowerCase();
+  
+  // Prompt-to-Agent Logic
+  if (lowerMsg.includes("build") || lowerMsg.includes("create") || lowerMsg.includes("agent")) {
+    // Dynamically generate an agent based on the prompt
+    let role = "Specialized AI";
+    let avatar = "🤖";
+    let type = "custom";
+    
+    if (lowerMsg.includes("scrape") || lowerMsg.includes("data")) {
+      role = "Data Scraping Specialist";
+      avatar = "🕸️";
+      type = "scraper";
+    } else if (lowerMsg.includes("crypto") || lowerMsg.includes("trade")) {
+      role = "Crypto Analyst";
+      avatar = "🪙";
+      type = "crypto";
+    } else if (lowerMsg.includes("research") || lowerMsg.includes("search")) {
+      role = "Deep Research AI";
+      avatar = "🔍";
+      type = "researcher";
+    }
+
+    const newAgent = {
+      id: uuidv4(),
+      name: `${type.charAt(0).toUpperCase() + type.slice(1)} Agent`,
+      type: type,
+      role: role,
+      status: "idle",
+      intelligence_score: Math.floor(Math.random() * 10) + 90,
+      tasks: 0,
+      avatar: avatar
+    };
+
+    // Add to global store and broadcast
+    store.agents.push(newAgent);
+    io.emit("agent:created", newAgent);
+    
+    io.emit("ai:activity", { agent: "Architect", action: "built new agent", message: `Deployed ${newAgent.name}` });
+
+    return res.json({ 
+      reply: `I have successfully built and deployed your ${role}. It is now active in your workspace and ready to receive tasks.`,
+      agentCreated: newAgent
+    });
+  }
+
+  // Standard conversational logic
+  const reply = `I understand you want to "${message.slice(0, 40)}...". I can delegate this to one of our active agents, or you can ask me to build a specialized agent for this exact task.`;
+  io.emit("ai:activity", { agent: "Architect", action: "analyzing prompt", message: "Processing conversational intent" });
+  
+  res.json({ reply, timestamp: new Date().toISOString() });
 });
 
 // Analytics

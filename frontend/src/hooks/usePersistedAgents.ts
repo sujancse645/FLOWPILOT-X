@@ -16,7 +16,7 @@ export function usePersistedAgents() {
   }, []);
 
   useEffect(() => {
-    refresh();
+    setTimeout(() => refresh(), 0);
     return localStore.subscribe("agents", () => setAgents(localStore.getAgents()));
   }, [refresh]);
 

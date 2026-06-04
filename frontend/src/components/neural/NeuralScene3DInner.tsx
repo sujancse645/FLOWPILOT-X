@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sphere, Line } from "@react-three/drei";
 import * as THREE from "three";
@@ -23,7 +23,9 @@ function NeuralNodes() {
     }
   });
 
-  const lines = useMemo(() => {
+  const [lines, setLines] = useState<[THREE.Vector3, THREE.Vector3][]>([]);
+
+  useEffect(() => {
     const pairs: [THREE.Vector3, THREE.Vector3][] = [];
     for (let i = 0; i < NODES.length; i++) {
       for (let j = i + 1; j < NODES.length; j++) {
@@ -35,7 +37,7 @@ function NeuralNodes() {
         }
       }
     }
-    return pairs;
+    setTimeout(() => setLines(pairs), 0);
   }, []);
 
   return (

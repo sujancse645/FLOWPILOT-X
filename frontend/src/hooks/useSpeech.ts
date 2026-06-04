@@ -11,7 +11,7 @@ export function useSpeech() {
 
   useEffect(() => {
     const SR = typeof window !== "undefined" && (window.SpeechRecognition || window.webkitSpeechRecognition);
-    setSupported(!!SR);
+    setTimeout(() => setSupported(!!SR), 0);
     if (!SR) return;
 
     const recognition = new SR();

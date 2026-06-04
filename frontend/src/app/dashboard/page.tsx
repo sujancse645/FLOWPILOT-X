@@ -27,7 +27,7 @@ export default function DashboardPage() {
     totalAgents: 8, activeWorkflows: 24, tasksCompleted: 1847,
     aiAccuracy: 97.3, customerSatisfaction: 4.8, automationRate: 78.5,
   });
-  const { connected } = useSocket();
+  const { socket, error } = useSocket();
 
   useEffect(() => {
     api<typeof stats>("/api/dashboard/stats").then(setStats).catch(() => {});

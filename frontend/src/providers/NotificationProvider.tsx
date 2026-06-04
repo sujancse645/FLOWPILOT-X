@@ -20,7 +20,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const refresh = useCallback(() => setNotifications(localStore.getNotifications()), []);
 
   useEffect(() => {
-    refresh();
+    setTimeout(() => refresh(), 0);
     return localStore.subscribe("notifications", refresh);
   }, [refresh]);
 

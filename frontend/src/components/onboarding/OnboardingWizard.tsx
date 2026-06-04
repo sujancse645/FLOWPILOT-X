@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Building2, Bot, GitBranch, Sparkles, ArrowRight, Check } from "lucide-react";
 import { localStore } from "@/lib/data/data-service";
-import { MagneticButton } from "@/components/fx/MagneticButton";
 
 const STEPS = [
   {

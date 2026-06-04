@@ -10,7 +10,7 @@ export function WorkflowReplay({ execution }: { execution: WorkflowExecutionReco
 
   useEffect(() => {
     if (!execution) return;
-    setStepIndex(0);
+    setTimeout(() => setStepIndex(0), 0);
     const iv = setInterval(() => {
       setStepIndex((i) => {
         if (i >= execution.timeline.length - 1) {

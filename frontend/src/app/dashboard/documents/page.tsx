@@ -25,14 +25,18 @@ export default function DocumentsPage() {
   }, []);
 
   useEffect(() => {
-    refresh();
+    setTimeout(() => {
+      refresh();
+    }, 0);
     return localStore.subscribe("documents", () => {
       const list = localStore.getDocuments();
-      setDocs(list);
-      if (selected) {
-        const updated = list.find((d) => d.id === selected.id);
-        if (updated) setSelected(updated);
-      }
+      setTimeout(() => {
+        setDocs(list);
+        if (selected) {
+          const updated = list.find((d) => d.id === selected.id);
+          if (updated) setSelected(updated);
+        }
+      }, 0);
     });
   }, [refresh, selected?.id]);
 

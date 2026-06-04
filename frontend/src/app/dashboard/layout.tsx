@@ -17,7 +17,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const settings = localStore.getSettings();
-    if (!settings.onboarding_complete) setShowOnboarding(true);
+    if (!settings.onboarding_complete) {
+      setTimeout(() => setShowOnboarding(true), 0);
+    }
   }, []);
 
   return (

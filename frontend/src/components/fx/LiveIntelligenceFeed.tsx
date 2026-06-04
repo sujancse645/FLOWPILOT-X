@@ -22,7 +22,7 @@ export function LiveIntelligenceFeed({ max = 5, className = "" }: { max?: number
       id: `sock-${i}`,
       text: `${a.agent} · ${a.action}`,
     }));
-    if (seed.length) setLines(seed);
+    if (seed.length) setTimeout(() => setLines(seed), 0);
   }, [activities, max]);
 
   useEffect(() => {

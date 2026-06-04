@@ -79,13 +79,15 @@ export function NeuralCommandCenter({
       "Analytics AI": "active",
     };
     const state = agentMap[latest.agent || ""] || "active";
-    setAgents((prev) =>
-      prev.map((a) =>
-        latest.agent?.includes(a.label.split(" ")[0])
-          ? { ...a, state }
-          : a
-      )
-    );
+    setTimeout(() => {
+      setAgents((prev) =>
+        prev.map((a) =>
+          latest.agent?.includes(a.label.split(" ")[0])
+            ? { ...a, state }
+            : a
+        )
+      );
+    }, 0);
   }, [logs, demoRunning]);
 
   // Burst particles on collaboration link
@@ -98,7 +100,7 @@ export function NeuralCommandCenter({
       t: Math.random() * 0.3,
       speed: 0.02 + Math.random() * 0.015,
     }));
-    setParticles((p) => [...p, ...burst].slice(-24));
+    setTimeout(() => setParticles((p) => [...p, ...burst].slice(-24)), 0);
   }, [activeLink]);
 
   // Ambient particle spawn
@@ -193,7 +195,7 @@ export function NeuralCommandCenter({
     });
 
     // Links
-    LINKS.forEach(([a, b], i) => {
+    LINKS.forEach(([a, b]) => {
       const A = getPos(a);
       const B = getPos(b);
       const isHot =

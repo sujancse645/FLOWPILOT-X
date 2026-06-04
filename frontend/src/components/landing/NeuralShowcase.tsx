@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/fx/ScrollReveal";
 import { MagneticButton } from "@/components/fx/MagneticButton";
 import dynamic from "next/dynamic";

@@ -40,11 +40,6 @@ export function AgentNetwork({ activeId }: { activeId?: string }) {
     return () => clearInterval(anim);
   }, []);
 
-  const toCoord = (idx: number) => {
-    const a = AGENTS[idx];
-    return { x: `${a.x}%`, y: `${a.y}%` };
-  };
-
   return (
     <div className="relative aspect-[16/10] w-full min-h-[320px] rounded-2xl overflow-hidden holo-panel">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(124,58,237,0.15),transparent_70%)]" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Sparkles } from "lucide-react";
 import { NeuralCommandCenter } from "./NeuralCommandCenter";
