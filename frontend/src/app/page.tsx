@@ -3,7 +3,9 @@ import { Hero } from "@/components/landing/Hero";
 import { 
   ProblemSection, 
   SolutionSection, 
-  BenefitsSection, 
+  LiveDemoSection,
+  FeaturesSection,
+  BusinessImpactSection, 
   CTASection 
 } from "@/components/landing/LandingSections";
 import { Footer } from "@/components/landing/Footer";
@@ -15,7 +17,9 @@ export default function HomePage() {
       <Hero />
       <ProblemSection />
       <SolutionSection />
-      <BenefitsSection />
+      <LiveDemoSection />
+      <FeaturesSection />
+      <BusinessImpactSection />
       <CTASection />
       <Footer />
     </main>
